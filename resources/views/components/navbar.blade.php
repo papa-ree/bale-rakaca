@@ -2,11 +2,10 @@
 Rakaca Navbar — merged Aurora design + Umpak capabilities
 - Struktur logika: umpakNav(), wire:navigate, dropdown, honeypot
 - Desain visual : Aurora CSS classes (nav, nav-inner, brand, nav-links, ...)
-- Theme toggle  : data-theme attribute (Aurora system) + Alpine x-data untuk fallback
+- Theme toggle : data-theme attribute (Aurora system) + Alpine x-data untuk fallback
 Usage: <x-bale-rakaca::navbar />
 --}}
 <nav class="nav" x-data="umpakNav()">
-    <x-gupa::honeypot fieldName="website_url" action="{{ route('index') }}" />
 
     <div class="nav-inner">
 
@@ -21,37 +20,32 @@ Usage: <x-bale-rakaca::navbar />
             @foreach ($umpakNav as $i => $item)
                 @php
                     $isInternal = str_starts_with($item->resolvedUrl, '/') || str_contains($item->resolvedUrl, config('app.url'));
-                    $isAnchor   = str_contains($item->resolvedUrl, '#');
+                    $isAnchor = str_contains($item->resolvedUrl, '#');
                     $useNavigate = $isInternal && !$isAnchor;
                 @endphp
 
                 @if ($item->hasChildren())
                     {{-- Dropdown item --}}
-                    <div class="nav-dropdown"
-                        @click="isDropdownOpen({{ $i }}) ? closeDropdown() : openDropdown({{ $i }})"
+                    <div class="nav-dropdown" @click="isDropdownOpen({{ $i }}) ? closeDropdown() : openDropdown({{ $i }})"
                         @click.outside="isDropdownOpen({{ $i }}) ? closeDropdown() : null">
-                        <button type="button" class="nav-dropdown-trigger"
-                            :class="isDropdownOpen({{ $i }}) ? 'active' : ''">
+                        <button type="button" class="nav-dropdown-trigger" :class="isDropdownOpen({{ $i }}) ? 'active' : ''">
                             {{ $item->name }}
-                            <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"
-                                :class="isDropdownOpen({{ $i }}) ? 'rotated' : ''">
+                            <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                aria-hidden="true" :class="isDropdownOpen({{ $i }}) ? 'rotated' : ''">
                                 <path d="M6 9l6 6 6-6" />
                             </svg>
                         </button>
 
-                        <div x-show="isDropdownOpen({{ $i }})" x-cloak
-                            x-transition:enter="transition ease-out duration-200"
+                        <div x-show="isDropdownOpen({{ $i }})" x-cloak x-transition:enter="transition ease-out duration-200"
                             x-transition:enter-start="opacity-0 translate-y-2"
-                            x-transition:enter-end="opacity-100 translate-y-0"
-                            class="nav-dropdown-panel">
+                            x-transition:enter-end="opacity-100 translate-y-0" class="nav-dropdown-panel">
                             @foreach ($item->children as $child)
                                 @php
                                     $childInternal = str_starts_with($child->resolvedUrl, '/') || str_contains($child->resolvedUrl, config('app.url'));
-                                    $childAnchor   = str_contains($child->resolvedUrl, '#');
+                                    $childAnchor = str_contains($child->resolvedUrl, '#');
                                     $childNavigate = $childInternal && !$childAnchor;
                                 @endphp
-                                <a href="{{ $child->resolvedUrl }}"
-                                    @if($childNavigate) wire:navigate.hover @endif
+                                <a href="{{ $child->resolvedUrl }}" @if($childNavigate) wire:navigate.hover @endif
                                     class="nav-dropdown-item">
                                     {{ $child->name }}
                                 </a>
@@ -59,12 +53,10 @@ Usage: <x-bale-rakaca::navbar />
                         </div>
                     </div>
                 @else
-                    <a href="{{ $item->resolvedUrl }}"
-                        @if($useNavigate) wire:navigate.hover @endif
-                        @class([
-                            'nav-link',
-                            'active' => request()->url() == $item->resolvedUrl || (request()->is('/') && $item->slug == 'beranda'),
-                        ])>
+                    <a href="{{ $item->resolvedUrl }}" @if($useNavigate) wire:navigate.hover @endif @class([
+                        'nav-link',
+                        'active' => request()->url() == $item->resolvedUrl || (request()->is('/') && $item->slug == 'beranda'),
+                    ])>
                         {{ $item->name }}
                     </a>
                 @endif
@@ -88,8 +80,8 @@ Usage: <x-bale-rakaca::navbar />
             </button>
 
             {{-- Hamburger (mobile) --}}
-            <button class="hamburger" id="menuToggle" type="button"
-                aria-label="Buka menu" aria-expanded="false" aria-controls="mobileMenu">
+            <button class="hamburger" id="menuToggle" type="button" aria-label="Buka menu" aria-expanded="false"
+                aria-controls="mobileMenu">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path d="M4 7h16M4 12h16M4 17h16" />
                 </svg>
@@ -102,8 +94,8 @@ Usage: <x-bale-rakaca::navbar />
         <div class="mobile-menu-inner">
             @foreach ($umpakNav as $i => $item)
                 @php
-                    $isInternal  = str_starts_with($item->resolvedUrl, '/') || str_contains($item->resolvedUrl, config('app.url'));
-                    $isAnchor    = str_contains($item->resolvedUrl, '#');
+                    $isInternal = str_starts_with($item->resolvedUrl, '/') || str_contains($item->resolvedUrl, config('app.url'));
+                    $isAnchor = str_contains($item->resolvedUrl, '#');
                     $useNavigate = $isInternal && !$isAnchor;
                 @endphp
 
@@ -121,11 +113,10 @@ Usage: <x-bale-rakaca::navbar />
                             @foreach ($item->children as $child)
                                 @php
                                     $childInternal = str_starts_with($child->resolvedUrl, '/') || str_contains($child->resolvedUrl, config('app.url'));
-                                    $childAnchor   = str_contains($child->resolvedUrl, '#');
+                                    $childAnchor = str_contains($child->resolvedUrl, '#');
                                     $childNavigate = $childInternal && !$childAnchor;
                                 @endphp
-                                <a href="{{ $child->resolvedUrl }}"
-                                    @if($childNavigate) wire:navigate.hover @endif
+                                <a href="{{ $child->resolvedUrl }}" @if($childNavigate) wire:navigate.hover @endif
                                     @click="onLinkClick()">
                                     {{ $child->name }}
                                 </a>
@@ -133,9 +124,7 @@ Usage: <x-bale-rakaca::navbar />
                         </div>
                     </div>
                 @else
-                    <a href="{{ $item->resolvedUrl }}"
-                        @if($useNavigate) wire:navigate.hover @endif
-                        @click="onLinkClick()"
+                    <a href="{{ $item->resolvedUrl }}" @if($useNavigate) wire:navigate.hover @endif @click="onLinkClick()"
                         @class(['nav-link', 'active' => request()->url() == $item->resolvedUrl])>
                         {{ $item->name }}
                     </a>
