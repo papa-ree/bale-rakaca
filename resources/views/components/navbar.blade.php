@@ -65,6 +65,13 @@ Usage: <x-bale-rakaca::navbar />
 
         {{-- Actions --}}
         <div class="nav-actions">
+            @auth
+                <button wire:click="guest" class="btn btn-primary"
+                    style="padding: 8px 18px; font-size: 0.88rem; text-decoration: none;">
+                    Masuk
+                </button>
+            @endauth
+
             {{-- Theme toggle (Aurora system: data-theme attr) --}}
             <button class="theme-toggle" id="themeToggle" type="button" aria-label="Ubah tema terang/gelap">
                 <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -130,6 +137,16 @@ Usage: <x-bale-rakaca::navbar />
                     </a>
                 @endif
             @endforeach
+
+            @auth
+                <div
+                    style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border, rgba(255,255,255,0.1));">
+                    <button wire:click="guest" class="btn btn-primary"
+                        style="width: 100%; justify-content: center; text-decoration: none;">
+                        Masuk
+                    </button>
+                </div>
+            @endauth
         </div>
     </div>
 </nav>

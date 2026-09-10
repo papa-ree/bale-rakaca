@@ -3,6 +3,7 @@
 namespace Bale\BaleRakaca\Livewire\LandingPage;
 
 use Bale\Umpak\Livewire\UmpakComponent;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 
@@ -13,9 +14,18 @@ class Index extends UmpakComponent
     public function render()
     {
         return view('bale-rakaca::livewire.landing-page.index', [
-            'heroSection'    => $this->section('hero'),
+            'heroSection' => $this->section('hero'),
             'serviceSection' => $this->section('service'),
             'contactSection' => $this->section('contact'),
         ]);
+    }
+
+    public function guest()
+    {
+        if (Auth::check()) {
+            return $this->redirect('/dashboard');
+        }
+
+        return $this->redirect('/login');
     }
 }
