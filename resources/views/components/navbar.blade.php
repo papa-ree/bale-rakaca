@@ -65,12 +65,10 @@ Usage: <x-bale-rakaca::navbar />
 
         {{-- Actions --}}
         <div class="nav-actions">
-            @auth
-                <button wire:click="guest" class="btn btn-primary"
-                    style="padding: 8px 18px; font-size: 0.88rem; text-decoration: none;">
-                    Masuk
-                </button>
-            @endauth
+            <button wire:click="login" class="btn btn-primary"
+                style="padding: 8px 18px; font-size: 0.88rem; text-decoration: none;">
+                Masuk
+            </button>
 
             {{-- Theme toggle (Aurora system: data-theme attr) --}}
             <button class="theme-toggle" id="themeToggle" type="button" aria-label="Ubah tema terang/gelap">
@@ -96,7 +94,7 @@ Usage: <x-bale-rakaca::navbar />
         </div>
     </div>
 
-    {{-- Mobile menu (Aurora CSS: max-height transition) --}}
+    {{-- Mobile menu (Aurora CSS: max-height & accordion) --}}
     <div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Menu mobile">
         <div class="mobile-menu-inner">
             @foreach ($umpakNav as $i => $item)
@@ -109,14 +107,17 @@ Usage: <x-bale-rakaca::navbar />
                 @if ($item->hasChildren())
                     <div class="mobile-dropdown">
                         <button type="button" class="mobile-dropdown-trigger"
-                            @click="isDropdownOpen({{ $i }}) ? closeDropdown() : openDropdown({{ $i }})">
+                            @click="isDropdownOpen('mobile-{{ $i }}') ? closeDropdown() : openDropdown('mobile-{{ $i }}')">
                             {{ $item->name }}
                             <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                :class="isDropdownOpen({{ $i }}) ? 'rotated' : ''">
+                                :class="isDropdownOpen('mobile-{{ $i }}') ? 'rotated' : ''">
                                 <path d="M6 9l6 6 6-6" />
                             </svg>
                         </button>
-                        <div x-show="isDropdownOpen({{ $i }})" x-cloak class="mobile-dropdown-children">
+                        <div x-show="isDropdownOpen('mobile-{{ $i }}')" x-cloak class="mobile-dropdown-children"
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 -translate-y-1"
+                            x-transition:enter-end="opacity-100 translate-y-0">
                             @foreach ($item->children as $child)
                                 @php
                                     $childInternal = str_starts_with($child->resolvedUrl, '/') || str_contains($child->resolvedUrl, config('app.url'));
@@ -138,15 +139,13 @@ Usage: <x-bale-rakaca::navbar />
                 @endif
             @endforeach
 
-            @auth
-                <div
-                    style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border, rgba(255,255,255,0.1));">
-                    <button wire:click="guest" class="btn btn-primary"
-                        style="width: 100%; justify-content: center; text-decoration: none;">
-                        Masuk
-                    </button>
-                </div>
-            @endauth
+            <div
+                style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border, rgba(255,255,255,0.1));">
+                <button wire:click="login" class="btn btn-primary"
+                    style="width: 100%; justify-content: center; text-decoration: none;">
+                    Masuk
+                </button>
+            </div>
         </div>
     </div>
 </nav>

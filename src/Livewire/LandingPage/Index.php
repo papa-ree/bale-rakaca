@@ -20,7 +20,7 @@ class Index extends UmpakComponent
         ]);
     }
 
-    public function guest()
+    public function login()
     {
         if (Auth::check()) {
             return $this->redirect('/dashboard');
