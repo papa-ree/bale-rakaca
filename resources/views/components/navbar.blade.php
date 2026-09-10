@@ -85,8 +85,8 @@ Usage: <x-bale-rakaca::navbar />
             </button>
 
             {{-- Hamburger (mobile) --}}
-            <button class="hamburger" id="menuToggle" type="button" aria-label="Buka menu" aria-expanded="false"
-                aria-controls="mobileMenu">
+            <button class="hamburger" id="menuToggle" type="button" aria-label="Buka menu"
+                :aria-expanded="mobileOpen ? 'true' : 'false'" @click="toggleMobile()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path d="M4 7h16M4 12h16M4 17h16" />
                 </svg>
@@ -95,8 +95,9 @@ Usage: <x-bale-rakaca::navbar />
     </div>
 
     {{-- Mobile menu (Aurora CSS: max-height & accordion) --}}
-    <div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Menu mobile">
-        <div class="mobile-menu-inner">
+    <div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Menu mobile" :class="{ 'open': mobileOpen }"
+        :style="mobileOpen ? 'max-height: calc(100vh - 65px); overflow-y: auto;' : ''">
+        <div class="mobile-menu-inner" style="padding-bottom: 24px;">
             @foreach ($umpakNav as $i => $item)
                 @php
                     $isInternal = str_starts_with($item->resolvedUrl, '/') || str_contains($item->resolvedUrl, config('app.url'));
@@ -140,7 +141,7 @@ Usage: <x-bale-rakaca::navbar />
             @endforeach
 
             <div
-                style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border, rgba(255,255,255,0.1));">
+                style="margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border, rgba(255,255,255,0.1));">
                 <button wire:click="login" class="btn btn-primary"
                     style="width: 100%; justify-content: center; text-decoration: none;">
                     Masuk
